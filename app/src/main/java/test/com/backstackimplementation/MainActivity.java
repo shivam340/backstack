@@ -70,13 +70,13 @@ public class MainActivity extends ActionBarActivity{
                 currentFragment = demoFragmentC;
                 break;
 
-            case 4:
+            case 3:
                 DemoFragmentD demoFragmentD = new DemoFragmentD();
                 name = "D";
                 demoFragmentD.setName(name);
                 currentFragment = demoFragmentD;
                 break;
-            case 5:
+            case 4:
                 DemoFragmentE demoFragmentE = new DemoFragmentE();
                 name = "E";
                 demoFragmentE.setName(name);
