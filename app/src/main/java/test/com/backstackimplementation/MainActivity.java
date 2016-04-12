@@ -1,6 +1,7 @@
 package test.com.backstackimplementation;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -131,6 +132,7 @@ public class MainActivity extends ActionBarActivity{
 
             } else if (position == 6) {
                 printBackStack();
+                startActivity(new Intent(MainActivity.this, MyPagerActivity.class));
             } else {
                 setFragment(position);
             }
