@@ -1,7 +1,7 @@
 package test.com.backstackimplementation;
 
-import android.app.Fragment;
-import android.content.Intent;
+import android.annotation.SuppressLint;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -9,17 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 
-public class MainActivity extends ActionBarActivity{
-
-    Fragment currentFragment;
-
-    private Button buttonA;
-    private Button buttonB;
-    private Button buttonC;
-    private Button buttonD;
-    private Button buttonE;
-    private Button buttonPrint;
-    private Button buttonBack;
+public class MainActivity extends ActionBarActivity {
 
 
     @Override
@@ -27,13 +17,13 @@ public class MainActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        buttonA = (Button) findViewById(R.id.add_a);
-        buttonB = (Button) findViewById(R.id.add_b);
-        buttonC = (Button) findViewById(R.id.add_c);
-        buttonD = (Button) findViewById(R.id.add_d);
-        buttonE = (Button) findViewById(R.id.add_e);
-        buttonBack = (Button) findViewById(R.id.back);
-        buttonPrint = (Button) findViewById(R.id.print);
+        Button buttonA = (Button) findViewById(R.id.add_a);
+        Button buttonB = (Button) findViewById(R.id.add_b);
+        Button buttonC = (Button) findViewById(R.id.add_c);
+        Button buttonD = (Button) findViewById(R.id.add_d);
+        Button buttonE = (Button) findViewById(R.id.add_e);
+        Button buttonBack = (Button) findViewById(R.id.back);
+        Button buttonPrint = (Button) findViewById(R.id.print);
 
         buttonA.setOnClickListener(new HandleOnClickListener(0));
         buttonB.setOnClickListener(new HandleOnClickListener(1));
@@ -47,8 +37,9 @@ public class MainActivity extends ActionBarActivity{
     }
 
     public void setFragment(int position) {
+        Fragment currentFragment;
         boolean addToBackStack = true;
-        String name = "";
+        String name;
         switch (position) {
             case 0:
                 name = "A";
@@ -77,7 +68,7 @@ public class MainActivity extends ActionBarActivity{
                 demoFragmentD.setName(name);
                 currentFragment = demoFragmentD;
                 break;
-            case 4:
+            default:
                 DemoFragmentE demoFragmentE = new DemoFragmentE();
                 name = "E";
                 demoFragmentE.setName(name);
@@ -86,31 +77,29 @@ public class MainActivity extends ActionBarActivity{
         }
 
 
-        android.app.FragmentTransaction fragmentTransaction;
         if (addToBackStack) {
 
-            fragmentTransaction = getFragmentManager()
+            getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.container, currentFragment, ""+name)
-                    .addToBackStack(name);
-            fragmentTransaction.commit();
-
+                    .add(R.id.container, currentFragment, name)
+                    .addToBackStack(name).commit();
         } else {
 
-            fragmentTransaction = getFragmentManager()
+            getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.container, currentFragment, ""+name);
-            fragmentTransaction.commit();
+                    .replace(R.id.container, currentFragment, name)
+                    .commit();
         }
 
     }
 
-    private void printBackStack(){
-        Log.d("there are total fragments", "in back stack" + getFragmentManager()
+    @SuppressLint("LongLogTag")
+    private void printBackStack() {
+        Log.d("there are total fragments", "in back stack" + getSupportFragmentManager()
                 .getBackStackEntryCount());
 
-        for(int entry = 0; entry < getFragmentManager().getBackStackEntryCount(); entry++){
-            Log.d("Found fragment: ","" + getFragmentManager().getBackStackEntryAt(entry).getName());
+        for (int entry = 0; entry < getSupportFragmentManager().getBackStackEntryCount(); entry++) {
+            Log.d("Found fragment: ", "" + getSupportFragmentManager().getBackStackEntryAt(entry).getName());
         }
     }
 
@@ -119,7 +108,7 @@ public class MainActivity extends ActionBarActivity{
 
         int position = 0;
 
-         HandleOnClickListener(int position) {
+        HandleOnClickListener(int position) {
             this.position = position;
         }
 
@@ -128,11 +117,11 @@ public class MainActivity extends ActionBarActivity{
 
             if (position == 5) {
 
-                getFragmentManager().popBackStack();
+                getSupportFragmentManager().popBackStack();
 
             } else if (position == 6) {
                 printBackStack();
-                startActivity(new Intent(MainActivity.this, MyPagerActivity.class));
+                //startActivity(new Intent(MainActivity.this, MyPagerActivity.class));
             } else {
                 setFragment(position);
             }
