@@ -11,7 +11,6 @@ import android.widget.Button;
 
 public class MainActivity extends ActionBarActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +21,8 @@ public class MainActivity extends ActionBarActivity {
         Button buttonC = (Button) findViewById(R.id.add_c);
         Button buttonD = (Button) findViewById(R.id.add_d);
         Button buttonE = (Button) findViewById(R.id.add_e);
+        Button replaceE = (Button) findViewById(R.id.replace_e);
+
         Button buttonBack = (Button) findViewById(R.id.back);
         Button buttonPrint = (Button) findViewById(R.id.print);
 
@@ -30,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
         buttonC.setOnClickListener(new HandleOnClickListener(2));
         buttonD.setOnClickListener(new HandleOnClickListener(3));
         buttonE.setOnClickListener(new HandleOnClickListener(4));
+        replaceE.setOnClickListener(new HandleOnClickListener(7));
 
         buttonBack.setOnClickListener(new HandleOnClickListener(5));
         buttonPrint.setOnClickListener(new HandleOnClickListener(6));
@@ -39,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
     public void setFragment(int position) {
         Fragment currentFragment;
         boolean addToBackStack = true;
+        boolean replace = false;
         String name;
         switch (position) {
             case 0:
@@ -68,21 +71,34 @@ public class MainActivity extends ActionBarActivity {
                 demoFragmentD.setName(name);
                 currentFragment = demoFragmentD;
                 break;
+
             default:
+                if (position == 7){
+                    replace = true;
+                }
                 DemoFragmentE demoFragmentE = new DemoFragmentE();
                 name = "E";
                 demoFragmentE.setName(name);
                 currentFragment = demoFragmentE;
                 break;
+
         }
 
 
         if (addToBackStack) {
 
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.container, currentFragment, name)
-                    .addToBackStack(name).commit();
+            if ( !replace) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.container, currentFragment, name)
+                        .addToBackStack(name).commit();
+            }else {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, currentFragment, name)
+                        .addToBackStack(name)
+                        .commit();
+            }
         } else {
 
             getSupportFragmentManager()
